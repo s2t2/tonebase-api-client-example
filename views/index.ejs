@@ -8,30 +8,33 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
-    <button id="create-user">Create User</button>
+    <h2>Users</h2>
+    <ul>
+      <li><a href="#" id="create-user">Create User</a></li>
+      <li><a href="https://tonebase-api.herokuapp.com/api/v1/users">List Users</a></li>
+    </ul>
+
 
     <script type="text/javascript">
 
       const baseUrl = "https://tonebase-api.herokuapp.com/api/v1" // "localhost:3000/api/v1"
+
+      var btnCreateUser = document.getElementById('create-user')
+      btnCreateUser.addEventListener("click", createUser, false)
 
       //
       // POST /users
       // example fetch POST usage: https://github.com/prof-rossetti/201701-southernct-internet-programming/blob/master/notes/javascript/ajax.md#post
       //
 
-      var btnCreateUser = document.getElementById('create-user')
-      btnCreateUser.addEventListener("click", createUser, false)
-
-      function createUser(event) {
-        event.preventDefault() // prevent duplicate form submission
-
+      function createUser() {
         const requestUrl = `${baseUrl}/users`
 
         const formData = {
           email: "avg.joe@gmail.com",
           password: "abc123(ENCRYPTED)",
-          //confirmed: true,
-          //visible: true,
+          confirmed: false,
+          visible: false,
           role: "User",
           access_level: "Full",
           first_name: "Joe",
@@ -40,7 +43,7 @@
           image_url: "https://my-bucket.s3.amazonaws.com/my-dir/my-image.jpg",
           //hero_url: "https://my-bucket.s3.amazonaws.com/my-dir/hero-image.jpg",
           //customer_uuid: "cus_abc123def45678",
-          //oauth: false,
+          //oauth: true,
           //oauth_provider: "Google"
         }
 
@@ -61,8 +64,12 @@
                   // HANDLE RESPONSE DATA HERE
                 })
             } else {
-              console.log("RESPONSE ERRORS", response)
-              // HANDLE RESPONSE ERRORS HERE
+              console.log("ERROR RESPONSE", response)
+              response.json()
+                .then(function(json){
+                  console.log("RESPONSE ERRORS", json)
+                  // HANDLE RESPONSE ERRORS HERE
+                })
             }
           })
           .catch(function(err){
