@@ -11,27 +11,70 @@
     <h2>Users</h2>
     <ul>
       <li><a href="#" id="create-user">Create User</a></li>
-      <li><a href="https://tonebase-api.herokuapp.com/api/v1/users">List Users</a></li>
+      <li><a href="#" id="list-users">List Users</a></li>
     </ul>
-
 
     <script type="text/javascript">
 
-      const baseUrl = "https://tonebase-api.herokuapp.com/api/v1" // "localhost:3000/api/v1"
+      const clientToken = "<%= process.env.TONEBASE_CLIENT_TOKEN %>" // get the token from environment variable to avoid checking it in to version control!
+      const auth = `Token token=${clientToken}`
+      const baseUrl = "https://tonebase-api.herokuapp.com/api/v1"
 
-      var btnCreateUser = document.getElementById('create-user')
-      btnCreateUser.addEventListener("click", createUser, false)
+      //
+      // GET /users
+      //
+
+      var btnListUsers = document.getElementById('list-users')
+
+      btnListUsers.addEventListener("click", listUsers, false)
+
+      function listUsers() {
+        const requestUrl = `${baseUrl}/users`
+
+        console.log("GET", requestUrl)
+
+        const requestOptions = {
+          method: "GET",
+          headers: {'Authorization': auth}
+        }
+
+        fetch(requestUrl, requestOptions)
+          .then(function(response) {
+            if (response.ok) { // check response status and proceed accordingly
+              response.json()
+                .then(function(json){
+                  console.log("RESPONSE", json)
+                  // HANDLE RESPONSE DATA HERE
+                })
+            } else {
+              console.log("ERROR RESPONSE", response)
+              response.json()
+                .then(function(json){
+                  console.log("RESPONSE ERRORS", json)
+                  // HANDLE RESPONSE ERRORS HERE
+                })
+            }
+          })
+          .catch(function(err){
+            console.log("FETCH ERRORS", err)
+            // HANDLE FETCH ERRORS HERE
+          })
+      }
 
       //
       // POST /users
       // example fetch POST usage: https://github.com/prof-rossetti/201701-southernct-internet-programming/blob/master/notes/javascript/ajax.md#post
       //
 
+      var btnCreateUser = document.getElementById('create-user')
+
+      btnCreateUser.addEventListener("click", createUser, false)
+
       function createUser() {
         const requestUrl = `${baseUrl}/users`
 
         const formData = {
-          email: "avg.joe@gmail.com",
+          email: "avg.joe123@gmail.com",
           password: "abc123(ENCRYPTED)",
           confirmed: false,
           visible: false,
@@ -51,7 +94,11 @@
 
         const requestOptions = {
           method: "POST",
-          headers: {'Accept':'application/json', 'Content-Type':'application/json'},
+          headers: {
+            'Accept':'application/json',
+            'Content-Type':'application/json',
+            'Authorization': auth
+          },
           body: JSON.stringify(formData)
         }
 
