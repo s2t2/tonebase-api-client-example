@@ -7,5 +7,70 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
+    <button id="create-user">Create User</button>
+
+    <script type="text/javascript">
+
+      const baseUrl = "https://tonebase-api.herokuapp.com/api/v1" // "localhost:3000/api/v1"
+
+      //
+      // POST /users
+      // example fetch POST usage: https://github.com/prof-rossetti/201701-southernct-internet-programming/blob/master/notes/javascript/ajax.md#post
+      //
+
+      var btnCreateUser = document.getElementById('create-user')
+      btnCreateUser.addEventListener("click", createUser, false)
+
+      function createUser(event) {
+        event.preventDefault() // prevent duplicate form submission
+
+        const requestUrl = `${baseUrl}/users`
+
+        const formData = {
+          email: "avg.joe@gmail.com",
+          password: "abc123(ENCRYPTED)",
+          //confirmed: true,
+          //visible: true,
+          role: "User",
+          access_level: "Full",
+          first_name: "Joe",
+          last_name: "Averaggi",
+          bio: "I love guitar and I'm hoping to get better!",
+          image_url: "https://my-bucket.s3.amazonaws.com/my-dir/my-image.jpg",
+          //hero_url: "https://my-bucket.s3.amazonaws.com/my-dir/hero-image.jpg",
+          //customer_uuid: "cus_abc123def45678",
+          //oauth: false,
+          //oauth_provider: "Google"
+        }
+
+        console.log("POST", requestUrl, formData)
+
+        const requestOptions = {
+          method: "POST",
+          headers: {'Accept':'application/json', 'Content-Type':'application/json'},
+          body: JSON.stringify(formData)
+        }
+
+        fetch(requestUrl, requestOptions)
+          .then(function(response) {
+            if (response.ok) { // check response status and proceed accordingly
+              response.json()
+                .then(function(json){
+                  console.log("RESPONSE", json)
+                  // HANDLE RESPONSE DATA HERE
+                })
+            } else {
+              console.log("RESPONSE ERRORS", response)
+              // HANDLE RESPONSE ERRORS HERE
+            }
+          })
+          .catch(function(err){
+            console.log("FETCH ERRORS", err)
+            // HANDLE FETCH ERRORS HERE
+          })
+      }
+
+    </script>
   </body>
 </html>
