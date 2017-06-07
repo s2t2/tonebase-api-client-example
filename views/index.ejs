@@ -74,20 +74,32 @@
         const requestUrl = `${baseUrl}/users`
 
         const formData = {
-          email: "avg.joe123@gmail.com",
-          password: "abc123(ENCRYPTED)",
-          confirmed: false,
-          visible: false,
+          email: "avg.joe@gmail.com",
+          password: "abc123",
+          username: "joe123",
+          confirmed: true,
+          visible: true,
           role: "User",
           access_level: "Full",
-          first_name: "Joe",
-          last_name: "Averaggi",
-          bio: "I love guitar and I'm hoping to get better!",
-          image_url: "https://my-bucket.s3.amazonaws.com/my-dir/my-image.jpg",
-          //hero_url: "https://my-bucket.s3.amazonaws.com/my-dir/hero-image.jpg",
-          //customer_uuid: "cus_abc123def45678",
-          //oauth: true,
-          //oauth_provider: "Google"
+          customer_uuid: "cus_abc123def45678",
+          oauth: true,
+          oauth_provider: "Google",
+          user_profile_attributes:{
+            first_name: "Joe",
+            last_name: "Averaggi",
+            bio: "I love guitar and I'm hoping to get better!",
+            image_url: "https://my-bucket.s3.amazonaws.com/my-dir/my-image.jpg",
+            hero_url: "https://my-bucket.s3.amazonaws.com/my-dir/hero-image.jpg",
+            birth_year: 1975,
+            professions: ["Student", "Performer", "Instructor"]
+          },
+          user_music_profile_attributes: {
+            guitar_owned: true,
+            guitar_models_owned: ["Gibson ABC", "Fender XYZ"],
+            fav_composers: ["Bach"],
+            fav_performers: ["Talenti"],
+            fav_periods: ["Classical", "Contemporary", "Baroque"]
+          }
         }
 
         console.log("POST", requestUrl, formData)
